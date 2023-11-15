@@ -85,6 +85,7 @@ const workoutHeaderEdit = document.querySelector('.form__workout-header');
 const modalOverlay = document.querySelector('.modal-overlay');
 const modal = document.querySelector('.modal');
 const cancelBtn = document.querySelector('.form__btn-cancel');
+const deleteAllBtn = document.querySelector('.delete-all-btn');
 
 class App {
   #map;
@@ -111,6 +112,7 @@ class App {
     containerWorkouts.addEventListener('click', this._showEditWorkout.bind(this));
     containerWorkouts.addEventListener('click', this._deleteWorkout.bind(this));
     cancelBtn.addEventListener('click', this._hideEditWorkout);
+    deleteAllBtn.addEventListener('click', this._deleteAllWorkouts.bind(this));
   }
 
   _getPosition() {
@@ -394,6 +396,30 @@ class App {
 
     // set local storage to all workouts
     this._setLocalStorage();
+  }
+
+  _deleteAllWorkouts() {
+    this.#markers = [];
+    this.#workouts = [];
+
+    // remove all workouts from DOM
+    document.querySelectorAll('.workout').forEach(work => {
+      work.remove();
+    });
+
+    // remove all markers
+    this._clearMarkers();
+
+    // set local storage to all workouts
+    this._setLocalStorage();
+  }
+
+  _clearMarkers() {
+    this.#map.eachLayer(layer => {
+      if (layer instanceof L.Marker) {
+        layer.remove();
+      }
+    });
   }
 
   _renderWorkoutMarker(workout) {

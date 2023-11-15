@@ -47,12 +47,34 @@ a:visited {
   padding: 3rem 5rem 4rem 5rem;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.delete-all-btn {
+  /* position: absolute; */
+  width: 100px;
+  margin-left: auto;
+  margin-bottom: 20px;
+  padding-block: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: var(--color-brand--2);
+  color: var(--color-dark--2);
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-all-btn:hover {
+  background-color: var(--color-light--2);
 }
 
 .logo {
   height: 5.2rem;
   align-self: center;
-  margin-bottom: 4rem;
+  margin-bottom: 1.5rem;
 }
 
 .workouts {
