@@ -326,13 +326,9 @@ class App {
     this.#workouts[workoutIndex] = workout;
 
     // clear DOM and render workouts on list
-    document.querySelectorAll('.workout').forEach(work => {
-      work.remove();
-    });
+    this._clearAllWorkoutsDOM()
 
-    this.#workouts.forEach(work => {
-      this._renderWorkout(work);
-    });
+    this._renderAllWorkouts()
 
     // clear and render new marker
     // prettier-ignore
@@ -367,19 +363,12 @@ class App {
     const workoutIndex = this.#workouts.findIndex(
       work => work.id === deleteBtn.closest('.workout').dataset.id
     );
-    console.log(workoutIndex);
-    console.log(this.#workouts);
     this.#workouts.splice(workoutIndex, 1);
-    console.log(this.#workouts);
 
     // delete this workout from DOM and render rest workouts on list
-    document.querySelectorAll('.workout').forEach(work => {
-      work.remove();
-    });
+    this._clearAllWorkoutsDOM();
 
-    this.#workouts.forEach(work => {
-      this._renderWorkout(work);
-    });
+    this._renderAllWorkouts()
 
     // delete marker of this workout
     const marker = this.#markers.find(
@@ -403,18 +392,22 @@ class App {
     this.#workouts = [];
 
     // remove all workouts from DOM
-    document.querySelectorAll('.workout').forEach(work => {
-      work.remove();
-    });
+    this._clearAllWorkoutsDOM();
 
     // remove all markers
-    this._clearMarkers();
+    this._clearAllMarkers();
 
     // set local storage to all workouts
     this._setLocalStorage();
   }
 
-  _clearMarkers() {
+  _clearAllWorkoutsDOM() {
+    document.querySelectorAll('.workout').forEach(work => {
+      work.remove();
+    });
+  }
+
+  _clearAllMarkers() {
     this.#map.eachLayer(layer => {
       if (layer instanceof L.Marker) {
         layer.remove();
@@ -495,6 +488,12 @@ class App {
     form.insertAdjacentHTML('afterend', html);
   }
 
+  _renderAllWorkouts() {
+    this.#workouts.forEach(work => {
+      this._renderWorkout(work);
+    });
+  }
+
   _moveToPopup(e) {
     const workoutEl = e.target.closest('.workout');
 
@@ -526,9 +525,7 @@ class App {
 
     this.#workouts = data;
 
-    this.#workouts.forEach(work => {
-      this._renderWorkout(work);
-    });
+    this._renderAllWorkouts()
   }
 
   // method to reset localStorage for example via console
