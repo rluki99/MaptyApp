@@ -3,7 +3,7 @@
 class Workout {
   date = new Date();
   id = (Date.now() + '').slice(-10) + Math.round(Math.random() * 1_000_000);
-  clicks = 0
+  clicks = 0;
 
   constructor(coords, distance, duration) {
     this.coords = coords; // [lat, lng]
@@ -21,7 +21,7 @@ class Workout {
   }
 
   click() {
-    this.clicks++
+    this.clicks++;
   }
 }
 
@@ -67,16 +67,19 @@ class Cycling extends Workout {
 // APPLICATION ARCHITECTURE
 
 const form = document.querySelector('.form');
+// const editForm = document.querySelector('.form__edit')
 const containerWorkouts = document.querySelector('.workouts');
 const inputType = document.querySelector('.form__input--type');
 const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
+const modalOverlay = document.querySelector('.modal-overlay')
+const modal = document.querySelector('.modal')
 
 class App {
   #map;
-  #mapZoomLevel = 13
+  #mapZoomLevel = 13;
   #mapEvent;
   #workouts = [];
 
@@ -85,12 +88,13 @@ class App {
     this._getPosition();
 
     // get data from local storage
-    this._getLocalStorage()
+    this._getLocalStorage();
 
     // attach event handlers
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
+    containerWorkouts.addEventListener('click', this._editWorkout.bind(this));
   }
 
   _getPosition() {
@@ -120,14 +124,19 @@ class App {
     this.#map.on('click', this._showForm.bind(this));
 
     this.#workouts.forEach(work => {
-      this._renderWorkoutMarker(work)
-    })
+      this._renderWorkoutMarker(work);
+    });
   }
 
   _showForm(mapE) {
     this.#mapEvent = mapE;
     form.classList.remove('hidden');
     inputDistance.focus();
+  }
+
+  _showEditForm() {
+    modalOverlay.classList.add('modal-overlay--active')
+    modal.classList.add('modal--active')
   }
 
   _hideForm() {
@@ -205,7 +214,20 @@ class App {
     this._hideForm();
 
     // set local storage to all workouts
-    this._setLocalStorage()
+    this._setLocalStorage();
+  }
+
+  _editWorkout(e) {
+    const editBtn = e.target.closest('.workout__edit');
+
+    if (!editBtn) return;
+
+    const workout = this.#workouts.find(
+      work => work.id === editBtn.closest('.workout').dataset.id
+    );
+
+    // showing modal with edit form
+    this._showEditForm()
   }
 
   _renderWorkoutMarker(workout) {
@@ -230,6 +252,7 @@ class App {
     let html = `
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
         <h2 class="workout__title">${workout.description}</h2>
+        <button class="workout__edit">EDIT</button>
         <div class="workout__details">
           <span class="workout__icon">${
             workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
@@ -282,38 +305,38 @@ class App {
     const workout = this.#workouts.find(
       work => work.id === workoutEl.dataset.id
     );
-    
+
     this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
       pan: {
-        duration: 1
-      }
-    })
+        duration: 1,
+      },
+    });
 
     // using the public interface
     // workout.click()
   }
 
   _setLocalStorage() {
-    localStorage.setItem('workouts', JSON.stringify(this.#workouts))
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
   }
 
   _getLocalStorage() {
-    const data = JSON.parse(localStorage.getItem('workouts'))
+    const data = JSON.parse(localStorage.getItem('workouts'));
 
-    if(!data) return
+    if (!data) return;
 
-    this.#workouts = data
+    this.#workouts = data;
 
     this.#workouts.forEach(work => {
-      this._renderWorkout(work)
-    })
+      this._renderWorkout(work);
+    });
   }
 
   // method to reset localStorage for example via console
   reset() {
-    localStorage.removeItem('workouts')
-    location.reload()
+    localStorage.removeItem('workouts');
+    location.reload();
   }
 }
 
