@@ -86,21 +86,26 @@ a:visited {
   border-left: 5px solid var(--color-brand--1);
 }
 
-.workout__edit {
-  top: 15px;
-  right: 15px;
+.workout__actions {
+  top: 10px;
+  right: 10px;
+  position: absolute;
+  display: flex;
+  gap: 5px;
+}
+
+.workout__edit, .workout__delete {
   padding: 3px 7px;
   border: none;
   border-radius: 5px;
   background-color: var(--color-dark--1);
   color: var(--color-light--2);
   font-size: 12px;
-  position: absolute;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
 }
 
-.workout__edit:hover {
+.workout__edit:hover, .workout__delete:hover {
   background-color: var(--color-light--2);
   color: var(--color-dark--1);
 }

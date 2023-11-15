@@ -109,6 +109,7 @@ class App {
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
     // prettier-ignore
     containerWorkouts.addEventListener('click', this._showEditWorkout.bind(this));
+    containerWorkouts.addEventListener('click', this._deleteWorkout.bind(this));
     cancelBtn.addEventListener('click', this._hideEditWorkout);
   }
 
@@ -332,7 +333,7 @@ class App {
     });
 
     // clear and render new marker
-    //prettier-ignore
+    // prettier-ignore
     const marker = this.#markers.find(marker => marker._latlng.lat == workout.coords[0] && marker._latlng.lng == workout.coords[1])
     const markerIndex = this.#markers.indexOf(marker);
 
@@ -348,6 +349,51 @@ class App {
 
     // hide modal with edit
     this._hideEditWorkout();
+  }
+
+  _deleteWorkout(e) {
+    const deleteBtn = e.target.closest('.workout__delete');
+
+    if (!deleteBtn) return;
+
+    // find workout to get coords for marker delete
+    const workout = this.#workouts.find(
+      work => work.id === deleteBtn.closest('.workout').dataset.id
+    );
+
+    // find this workout in #workouts array and delete it
+    const workoutIndex = this.#workouts.findIndex(
+      work => work.id === deleteBtn.closest('.workout').dataset.id
+    );
+    console.log(workoutIndex);
+    console.log(this.#workouts);
+    this.#workouts.splice(workoutIndex, 1);
+    console.log(this.#workouts);
+
+    // delete this workout from DOM and render rest workouts on list
+    document.querySelectorAll('.workout').forEach(work => {
+      work.remove();
+    });
+
+    this.#workouts.forEach(work => {
+      this._renderWorkout(work);
+    });
+
+    // delete marker of this workout
+    const marker = this.#markers.find(
+      marker =>
+        marker._latlng.lat == workout.coords[0] &&
+        marker._latlng.lng == workout.coords[1]
+    );
+    const markerIndex = this.#markers.indexOf(marker);
+
+    if (markerIndex !== -1) {
+      this.#map.removeLayer(marker);
+      this.#markers.splice(markerIndex, 1);
+    }
+
+    // set local storage to all workouts
+    this._setLocalStorage();
   }
 
   _renderWorkoutMarker(workout) {
@@ -375,7 +421,10 @@ class App {
     let html = `
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
         <h2 class="workout__title">${workout.description}</h2>
-        <button class="workout__edit">EDIT</button>
+        <div class="workout__actions">
+          <button class="workout__edit">EDIT</button>
+          <button class="workout__delete">❌</button>
+        </div>
         <div class="workout__details">
           <span class="workout__icon">${
             workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
