@@ -205,6 +205,7 @@ a:visited {
 }
 
 .form__btn-accept,.form__btn-cancel {
+  display: block;
   margin-top: 20px;
   border: none;
   border-radius: 5px;
