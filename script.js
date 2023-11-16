@@ -78,14 +78,15 @@ const inputTypeEdit = document.querySelector('.form__input--type-edit');
 const inputDistanceEdit = document.querySelector('.form__input--distance-edit');
 const inputDurationEdit = document.querySelector('.form__input--duration-edit');
 const inputCadenceEdit = document.querySelector('.form__input--cadence-edit');
-const inputElevationEdit = document.querySelector(
-  '.form__input--elevation-edit'
-);
+//prettier-ignore
+const inputElevationEdit = document.querySelector('.form__input--elevation-edit');
 const workoutHeaderEdit = document.querySelector('.form__workout-header');
 const modalOverlay = document.querySelector('.modal-overlay');
 const modal = document.querySelector('.modal');
 const cancelBtn = document.querySelector('.form__btn-cancel');
 const deleteAllBtn = document.querySelector('.delete-all-btn');
+const alertOverlay = document.querySelector('.alert-overlay');
+const alertMess = document.querySelector('.alert');
 
 class App {
   #map;
@@ -179,6 +180,24 @@ class App {
     inputCadenceEdit.closest('.form__row').classList.toggle('form__row--hidden');
   }
 
+  _showAlert() {
+    alertOverlay.classList.add('alert-overlay--active');
+    alertMess.classList.add('alert--active');
+    //prettier-ignore
+    document.querySelector('.alert__btn').addEventListener('click', this._hideAlert);
+    //prettier-ignore
+    window.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' || e.key === 'Enter') {
+        this._hideAlert()
+      }
+    });
+  }
+
+  _hideAlert() {
+    alertOverlay.classList.remove('alert-overlay--active');
+    alertMess.classList.remove('alert--active');
+  }
+
   _validWorkoutInputs(
     type,
     distance,
@@ -235,7 +254,9 @@ class App {
       inputCadence,
       inputElevation
     );
-    if (!workout) return alert('Inputs have to be positive numbers!');
+
+    // show alert if validation is invalid
+    if (!workout) return this._showAlert();
 
     // add new object to workout array
     this.#workouts.push(workout);
@@ -317,7 +338,9 @@ class App {
       inputCadenceEdit,
       inputElevationEdit
     );
-    if (!workout) return alert('Inputs have to be positive numbers!');
+
+    // show alert if validation is invalid
+    if (!workout) return this._showAlert();
 
     // find this workout in #workouts array and rewrite it
     const workoutIndex = this.#workouts.findIndex(

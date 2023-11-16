@@ -116,7 +116,8 @@ a:visited {
   gap: 5px;
 }
 
-.workout__edit, .workout__delete {
+.workout__edit,
+.workout__delete {
   padding: 3px 7px;
   border: none;
   border-radius: 5px;
@@ -127,7 +128,8 @@ a:visited {
   transition: background-color 0.3s, color 0.3s;
 }
 
-.workout__edit:hover, .workout__delete:hover {
+.workout__edit:hover,
+.workout__delete:hover {
   background-color: var(--color-light--2);
   color: var(--color-dark--1);
 }
@@ -231,7 +233,8 @@ a:visited {
   display: none;
 }
 
-.form__btn-accept,.form__btn-cancel {
+.form__btn-accept,
+.form__btn-cancel {
   display: block;
   margin-top: 20px;
   border: none;
@@ -241,10 +244,19 @@ a:visited {
   padding-inline: 15px;
   cursor: pointer;
   width: 100px;
+  transition: background-color 0.3s;
 }
 
 .form__btn-accept {
   justify-self: flex-end;
+}
+
+.form__btn-accept:hover {
+  background-color: var(--color-brand--2);
+}
+
+.form__btn-cancel:hover {
+  background-color: var(--color-brand--1);
 }
 
 .copyright {
@@ -296,7 +308,8 @@ a:visited {
   border-left: 5px solid var(--color-brand--1);
 }
 
-.modal-overlay {
+.modal-overlay,
+.alert-overlay {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.6);
@@ -307,7 +320,11 @@ a:visited {
   z-index: 1000;
 }
 
-.modal-overlay--active {
+.alert-overlay {
+  z-index: 1001;
+}
+
+.modal-overlay--active, .alert-overlay--active {
   display: block;
 }
 
@@ -338,4 +355,57 @@ a:visited {
   background-color: var(--color-dark--2);
   border-radius: 15px;
   padding-block: 20px;
+}
+
+.alert {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0);
+  transition: transform 0.6s ease, opacity 0.3s ease;
+  opacity: 0;
+  z-index: 1001;
+}
+
+.alert--active {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.alert__container {
+  background-color: var(--color-dark--2);
+  border-radius: 15px;
+  padding-top: 40px;
+  padding-bottom: 20px;
+  padding-inline: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.alert__description {
+  font-size: 22px;
+}
+
+.alert__btn {
+  display: block;
+  margin-top: 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  padding-block: 5px;
+  padding-inline: 15px;
+  cursor: pointer;
+  width: 100px;
+  transition: background-color 0.3s;
+}
+
+.alert__btn:hover {
+  background-color: var(--color-brand--2);
 }
