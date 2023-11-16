@@ -323,12 +323,15 @@ class App {
     const workoutIndex = this.#workouts.findIndex(
       work => work.id === this.#workoutEdit.id
     );
+    // keep the same id and date of workout in object
+    workout.id = this.#workouts[workoutIndex].id;
+    workout.date = this.#workouts[workoutIndex].date;
     this.#workouts[workoutIndex] = workout;
 
     // clear DOM and render workouts on list
-    this._clearAllWorkoutsDOM()
+    this._clearAllWorkoutsDOM();
 
-    this._renderAllWorkouts()
+    this._renderAllWorkouts();
 
     // clear and render new marker
     // prettier-ignore
@@ -368,7 +371,7 @@ class App {
     // delete this workout from DOM and render rest workouts on list
     this._clearAllWorkoutsDOM();
 
-    this._renderAllWorkouts()
+    this._renderAllWorkouts();
 
     // delete marker of this workout
     const marker = this.#markers.find(
@@ -525,7 +528,7 @@ class App {
 
     this.#workouts = data;
 
-    this._renderAllWorkouts()
+    this._renderAllWorkouts();
   }
 
   // method to reset localStorage for example via console
