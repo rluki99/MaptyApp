@@ -5,6 +5,7 @@ This is a simple workout tracker application that allows users to log their runn
 ### Preview
 
 ![obraz](https://github.com/rluki99/MaptyApp/assets/120097849/12321677-87a8-4b9b-ba1a-e66927ef981d)
+https://rluki99.github.io/MaptyApp/
 
 ## Technologies Used
 
